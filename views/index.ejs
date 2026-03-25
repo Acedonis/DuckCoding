@@ -2,11 +2,18 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title><%= botName %></title>
+  <title>Painel de Bots</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <h1><%= botName %></h1>
-  <p>Status: <%= status %></p>
+  <h1>Painel de Bots</h1>
+
+  <div class="bot-card">
+    <h2>DuckCoding Bot</h2>
+    <p>Status: <span class="status"><%= status %></span></p>
+    <button onclick="atualizarStatus()">Atualizar</button>
+  </div>
+
+  <script src="/script.js"></script>
 </body>
 </html>
