@@ -3,159 +3,176 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DuckCoding — Dashboard</title>
+  <title>DuckCoding — dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
-  <style>
-    .dash-hero { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 28px 32px; }
-    .dash-hero-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-    .dash-greeting h1 { font-size: 1.5rem; margin: 0; color: var(--text); }
-    .dash-greeting h1 em { font-style: normal; color: var(--accent-bright); }
-    .dash-greeting p { color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0; font-family: var(--font-display); }
-    .btn-logout { background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 16px; font-size: 0.82rem; cursor: pointer; text-decoration: none; display: inline-block; transition: color 0.2s, border-color 0.2s; font-family: var(--font-display); }
-    .btn-logout:hover { color: var(--text); border-color: var(--border-hover); }
-    .dash-content { max-width: 900px; margin: 0 auto; padding: 36px 32px; }
-    .dash-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-    .dash-section-header h2 { font-size: 1.2rem; margin: 0; }
-    .dash-section-header p { color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0; }
-    .upload-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 32px; }
-    .upload-card h3 { font-size: 1rem; margin: 0 0 20px; color: var(--text); font-family: var(--font-display); font-weight: 400; }
-    .upload-form { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
-    .form-field { display: flex; flex-direction: column; gap: 6px; }
-    .form-field label { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-field input, .form-field select { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: var(--font-display); font-size: 0.82rem; padding: 9px 12px; outline: none; transition: border-color 0.2s; }
-    .form-field input:focus, .form-field select:focus { border-color: var(--accent); }
-    .form-field select option { background: var(--bg-card); }
-    .bots-list { display: flex; flex-direction: column; gap: 12px; }
-    .bot-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; transition: border-color 0.2s; }
-    .bot-item:hover { border-color: var(--border-hover); }
-    .bot-info { flex: 1; min-width: 0; }
-    .bot-info h4 { margin: 0 0 4px; font-size: 0.95rem; color: var(--text); font-family: var(--font-display); font-weight: 400; }
-    .bot-info p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
-    .bot-controls { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
-    .log-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-top: 12px; font-family: var(--font-display); font-size: 0.78rem; color: var(--green); max-height: 120px; overflow-y: auto; display: none; white-space: pre-wrap; line-height: 1.6; }
-    .log-box.active { display: block; }
-    .empty-state { background: var(--bg-card); border: 1px dashed var(--border); border-radius: var(--radius); padding: 48px 32px; text-align: center; }
-    .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.3; }
-    .empty-state h3 { font-size: 1rem; margin: 0 0 8px; }
-    .empty-state p { color: var(--text-muted); font-size: 0.88rem; margin: 0 0 20px; }
-    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(248,113,113,0.2); border-radius: var(--radius-sm); padding: 7px 14px; font-family: var(--font-display); font-size: 0.78rem; cursor: pointer; transition: background 0.2s; }
-    .btn-danger:hover { background: rgba(248,113,113,0.1); }
-    .btn-edit { background: transparent; color: var(--accent-bright); border: 1px solid rgba(124,106,255,0.2); border-radius: var(--radius-sm); padding: 7px 14px; font-family: var(--font-display); font-size: 0.78rem; cursor: pointer; transition: background 0.2s; text-decoration: none; }
-    .btn-edit:hover { background: rgba(124,106,255,0.1); }
-  </style>
 </head>
 <body>
-  <nav class="top-menu">
-    <div class="nav-brand">
-      <span class="duck-icon">🦆</span>
-      <span class="brand-name">DuckCoding</span>
-    </div>
-    <ul>
-      <li><a href="/dashboard">Painel</a></li>
-      <li><a href="/logout" class="btn-logout">Sair →</a></li>
-    </ul>
-  </nav>
 
-  <div class="dash-hero">
-    <div class="dash-hero-inner">
-      <div class="dash-greeting">
-        <h1>Olá, <em><%= user.username %></em></h1>
-        <p>// painel de controlo de bots</p>
-      </div>
+<nav class="top-menu">
+  <div class="nav-brand">
+    <span class="duck-icon">🦆</span>
+    duckcoding
+  </div>
+  <ul>
+    <li><a href="/dashboard">dashboard</a></li>
+    <li><a href="/editor" class="nav-cta">+ novo bot</a></li>
+  </ul>
+  <div class="user-menu">
+    <img src="<%= user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.username) + '&background=39d353&color=080b0f&bold=true' %>" alt="avatar" class="user-avatar" id="user-avatar">
+    <div class="dropdown-menu" id="dropdown-menu">
+      <a href="/logout">sair →</a>
     </div>
   </div>
+</nav>
 
-  <div class="dash-content">
+<div class="dash-hero">
+  <div class="dash-hero-inner">
+    <div class="dash-greeting">
+      <h1>olá, <em><%= user.username %></em></h1>
+      <p>// <%= bots.length %> bot<%= bots.length !== 1 ? 's' : '' %> registado<%= bots.length !== 1 ? 's' : '' %></p>
+    </div>
+  </div>
+</div>
 
-    <div class="upload-card">
-      <h3>+ Fazer deploy de novo bot</h3>
+<div class="dash-content">
+  <div class="dash-grid">
+    <div class="card">
+      <h3>upload de ficheiro</h3>
       <form action="/bot/upload" method="POST" enctype="multipart/form-data" class="upload-form">
         <div class="form-field">
-          <label>Nome do bot</label>
+          <label>nome</label>
           <input type="text" name="botname" placeholder="ex: meu-bot">
         </div>
         <div class="form-field">
-          <label>Linguagem</label>
+          <label>linguagem</label>
           <select name="lang">
-            <option value="python">Python</option>
-            <option value="java">Java</option>
+            <option value="python">python</option>
+            <option value="java">java</option>
           </select>
         </div>
         <div class="form-field">
-          <label>Ficheiro</label>
-          <input type="file" name="botfile" accept=".py,.java" required>
+          <label>ficheiro</label>
+          <input type="file" id="botfile" name="botfile" accept=".py,.java" required style="display:none">
+          <label for="botfile" class="file-label" id="file-label">clica para escolher .py ou .java</label>
         </div>
-        <button type="submit" class="btn-primary">Upload</button>
+        <button type="submit" class="btn-primary">upload & deploy</button>
       </form>
     </div>
 
-    <div class="dash-section-header">
-      <div>
-        <h2>Os meus bots</h2>
-        <p><%= bots.length %> bot<%= bots.length !== 1 ? 's' : '' %> registado<%= bots.length !== 1 ? 's' : '' %></p>
-      </div>
-      <a href="/editor" class="btn-primary">+ Novo bot no editor</a>
+    <div class="card" style="display:flex; flex-direction:column; justify-content:center; gap:16px;">
+      <h3>editor de código</h3>
+      <p style="font-size:0.82rem; color:var(--text-dim); line-height:1.6;">Escreve, corre e gere os teus bots diretamente no browser com output em tempo real.</p>
+      <a href="/editor" class="btn-hero" style="align-self:flex-start;">abrir editor →</a>
     </div>
-
-    <% if (bots.length === 0) { %>
-      <div class="empty-state">
-        <div class="empty-icon">🤖</div>
-        <h3>Ainda não tens bots</h3>
-        <p>Faz upload de um ficheiro ou usa o editor para criar um bot.</p>
-        <a href="/editor" class="btn-primary">Abrir editor</a>
-      </div>
-    <% } else { %>
-      <div class="bots-list">
-        <% bots.forEach(function(bot) { %>
-          <div class="bot-item">
-            <div class="bot-info">
-              <h4><%= bot.name %></h4>
-              <p><%= bot.filename %> · <%= bot.lang %></p>
-              <div class="log-box" id="log-<%= bot._id %>"></div>
-            </div>
-            <div class="bot-controls">
-              <span class="status-badge <%= bot.status === 'running' ? 'online' : 'offline' %>">
-                <%= bot.status === 'running' ? 'online' : 'offline' %>
-              </span>
-              <a href="/editor?bot=<%= bot._id %>" class="btn-edit">Editar</a>
-              <% if (bot.status !== 'running') { %>
-                <form action="/bot/start/<%= bot._id %>" method="POST" style="display:inline">
-                  <button type="submit" class="btn-primary">▶ Iniciar</button>
-                </form>
-              <% } else { %>
-                <form action="/bot/stop/<%= bot._id %>" method="POST" style="display:inline">
-                  <button type="submit" class="btn-secondary">■ Parar</button>
-                </form>
-              <% } %>
-              <form action="/bot/delete/<%= bot._id %>" method="POST" style="display:inline" onsubmit="return confirm('Tens a certeza?')">
-                <button type="submit" class="btn-danger">Apagar</button>
-              </form>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    <% } %>
   </div>
 
-  <footer>
-    <span class="duck-icon">🦆</span>
-    <span>&copy; 2026 DuckCoding — Todos os direitos reservados.</span>
-  </footer>
+  <div class="dash-section-header">
+    <div>
+      <h2>os meus bots</h2>
+      <p><%= bots.length %> registado<%= bots.length !== 1 ? 's' : '' %></p>
+    </div>
+  </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    socket.emit("join", "<%= user._id %>");
-    socket.on("log", function(data) {
-      const box = document.getElementById("log-" + data.botId);
-      if (box) {
-        box.classList.add("active");
-        box.textContent += data.msg;
-        box.scrollTop = box.scrollHeight;
-      }
-    });
-  </script>
+  <% if (bots.length === 0) { %>
+    <div class="empty-state">
+      <span class="empty-icon">🤖</span>
+      <h3>sem bots ainda</h3>
+      <p>faz upload de um ficheiro ou abre o editor para criar o teu primeiro bot.</p>
+      <a href="/editor" class="btn-primary">abrir editor</a>
+    </div>
+  <% } else { %>
+    <div class="bots-list">
+      <% bots.forEach(function(bot) { %>
+        <div class="bot-item" id="bot-<%= bot._id %>">
+          <div class="bot-info">
+            <h4><%= bot.name %></h4>
+            <p><%= bot.filename %> · <%= bot.lang %></p>
+            <div class="log-box" id="log-<%= bot._id %>"></div>
+          </div>
+          <div class="bot-controls">
+            <span class="status-badge <%= bot.status === 'running' ? 'online' : 'offline' %>" id="badge-<%= bot._id %>">
+              <%= bot.status === 'running' ? 'online' : 'offline' %>
+            </span>
+            <a href="/editor?bot=<%= bot._id %>" class="btn-edit">editar</a>
+            <button class="btn-primary" onclick="startBot('<%= bot._id %>')" id="start-<%= bot._id %>" <%= bot.status === 'running' ? 'style="display:none"' : '' %>>▶ iniciar</button>
+            <button class="btn-secondary" onclick="stopBot('<%= bot._id %>')" id="stop-<%= bot._id %>" <%= bot.status !== 'running' ? 'style="display:none"' : '' %>>■ parar</button>
+            <button class="btn-danger" onclick="deleteBot('<%= bot._id %>')">apagar</button>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<footer>
+  <span class="duck-icon">🦆</span>
+  <span>© 2026 duckcoding</span>
+</footer>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  socket.emit("join", "<%= user._id %>");
+
+  socket.on("log", function(data) {
+    const box = document.getElementById("log-" + data.botId);
+    if (!box) return;
+    box.classList.add("active");
+    const span = document.createElement("span");
+    if (data.type === "err") span.className = "log-err";
+    if (data.type === "sys") span.className = "log-sys";
+    span.textContent = data.msg;
+    box.appendChild(span);
+    box.scrollTop = box.scrollHeight;
+  });
+
+  function startBot(botId) {
+    fetch("/bot/start/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          document.getElementById("start-" + botId).style.display = "none";
+          document.getElementById("stop-" + botId).style.display = "inline-block";
+          const b = document.getElementById("badge-" + botId);
+          b.textContent = "online"; b.className = "status-badge online";
+        }
+      });
+  }
+
+  function stopBot(botId) {
+    fetch("/bot/stop/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          document.getElementById("stop-" + botId).style.display = "none";
+          document.getElementById("start-" + botId).style.display = "inline-block";
+          const b = document.getElementById("badge-" + botId);
+          b.textContent = "offline"; b.className = "status-badge offline";
+        }
+      });
+  }
+
+  function deleteBot(botId) {
+    if (!confirm("apagar este bot?")) return;
+    fetch("/bot/delete/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => { if (d.ok) document.getElementById("bot-" + botId).remove(); });
+  }
+
+  document.getElementById("botfile").addEventListener("change", function() {
+    document.getElementById("file-label").textContent = this.files[0] ? this.files[0].name : "clica para escolher .py ou .java";
+  });
+
+  const avatar = document.getElementById("user-avatar");
+  const dropdown = document.getElementById("dropdown-menu");
+  avatar.addEventListener("click", function() {
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+  window.addEventListener("click", function(e) {
+    if (!avatar.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display = "none";
+  });
+</script>
 </body>
 </html>
