@@ -1,0 +1,36 @@
+<div class="dash-section-header">
+  <div>
+    <h2>os meus bots</h2>
+    <p><%= bots.length %> registado<%= bots.length !== 1 ? 's' : '' %></p>
+  </div>
+</div>
+
+<% if (bots.length === 0) { %>
+  <div class="empty-state">
+    <span class="empty-icon">🤖</span>
+    <h3>sem bots ainda</h3>
+    <p>faz upload de um ficheiro ou abre o editor para criar o teu primeiro bot.</p>
+    <a href="/editor" class="btn-primary">abrir editor</a>
+  </div>
+<% } else { %>
+  <div class="bots-list">
+    <% bots.forEach(function(bot) { %>
+      <div class="bot-item" id="bot-<%= bot._id %>">
+        <div class="bot-info">
+          <h4><%= bot.name %></h4>
+          <p><%= bot.filename %> · <%= bot.lang %></p>
+          <div class="log-box" id="log-<%= bot._id %>"></div>
+        </div>
+        <div class="bot-controls">
+          <span class="status-badge <%= bot.status === 'running' ? 'online' : 'offline' %>" id="badge-<%= bot._id %>">
+            <%= bot.status === 'running' ? 'online' : 'offline' %>
+          </span>
+          <a href="/editor?bot=<%= bot._id %>" class="btn-edit">editar</a>
+          <button class="btn-primary" onclick="startBot('<%= bot._id %>')" id="start-<%= bot._id %>" <%= bot.status === 'running' ? 'style="display:none"' : '' %>>▶ iniciar</button>
+          <button class="btn-secondary" onclick="stopBot('<%= bot._id %>')" id="stop-<%= bot._id %>" <%= bot.status !== 'running' ? 'style="display:none"' : '' %>>■ parar</button>
+          <button class="btn-danger" onclick="deleteBot('<%= bot._id %>')">apagar</button>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>

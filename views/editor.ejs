@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DuckCoding — editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    body { overflow: hidden; }
+    .editor-layout { display:flex; flex-direction:column; height:calc(100vh - var(--nav-height)); }
+    .editor-toolbar { background:var(--bg-2); border-bottom:1px solid var(--border); padding:8px 16px; display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:wrap; }
+    .editor-toolbar input { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text); font-family:var(--font-mono); font-size:0.78rem; padding:6px 10px; outline:none; width:160px; transition:border-color 0.15s; }
+    .editor-toolbar input:focus { border-color:var(--green); }
+    .editor-toolbar select { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text); font-family:var(--font-mono); font-size:0.78rem; padding:6px 10px; outline:none; cursor:pointer; }
+    .editor-toolbar select option { background:var(--bg-2); }
+    .toolbar-sep { width:1px; height:20px; background:var(--border); margin:0 2px; flex-shrink:0; }
+    .status-indicator { font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dimmer); display:flex; align-items:center; gap:6px; margin-left:auto; }
+    .status-dot { width:6px; height:6px; border-radius:50%; background:var(--text-dimmer); transition:background 0.3s, box-shadow 0.3s; }
+    .status-dot.running { background:var(--green); box-shadow:0 0 8px var(--green); }
+    .editor-main { display:flex; flex:1; overflow:hidden; }
+    .code-wrapper { flex:1; display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--border); }
+    .code-tabs { background:var(--bg-2); border-bottom:1px solid var(--border); padding:0 16px; display:flex; align-items:center; gap:0; }
+    .code-tab { font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dimmer); padding:8px 16px; border-right:1px solid var(--border); cursor:pointer; transition:color 0.15s, background 0.15s; }
+    .code-tab.active { color:var(--green); background:var(--bg); border-bottom:2px solid var(--green); margin-bottom:-1px; }
+    #code-area { flex:1; resize:none; background:var(--bg); border:none; color:var(--text); font-family:var(--font-mono); font-size:13px; padding:20px 24px; outline:none; line-height:1.8; tab-size:2; height:100%; }
+    .line-numbers { background:var(--bg); border-right:1px solid var(--border); padding:20px 12px; font-family:var(--font-mono); font-size:13px; color:var(--text-dimmer); line-height:1.8; text-align:right; min-width:48px; user-select:none; overflow:hidden; }
+    .terminal-panel { width:360px; flex-shrink:0; background:var(--bg); display:flex; flex-direction:column; }
+    .terminal-header { padding:8px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--bg-2); gap:8px; }
+    .terminal-header-left { display:flex; align-items:center; gap:8px; }
+    .terminal-dots { display:flex; gap:5px; }
+    .t-dot { width:10px; height:10px; border-radius:50%; }
+    .t-dot.r { background:#f85149; }
+    .t-dot.y { background:#e3b341; }
+    .t-dot.g { background:#39d353; }
+    .terminal-title { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-dimmer); text-transform:uppercase; letter-spacing:1px; }
+    .terminal-output { flex:1; overflow-y:auto; padding:14px 16px; font-family:var(--font-mono); font-size:0.75rem; line-height:1.7; color:var(--green); white-space:pre-wrap; }
+    .terminal-output::-webkit-scrollbar { width:4px; }
+    .terminal-output::-webkit-scrollbar-track { background:transparent; }
+    .terminal-output::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .log-err { color:var(--red); }
+    .log-sys { color:var(--text-dimmer); }
+    .log-warn { color:var(--orange); }
+    .shortcut-hint { font-family:var(--font-mono); font-size:0.65rem; color:var(--text-dimmer); background:var(--bg-3); border:1px solid var(--border); border-radius:3px; padding:2px 6px; }
+  </style>
+</head>
+<body>
+
+<nav class="top-menu">
+  <div class="nav-brand">
+    <span class="duck-icon">🦆</span>
+    duckcoding
+  </div>
+  <ul>
+    <li><a href="/dashboard">← dashboard</a></li>
+  </ul>
+</nav>
+
+<div class="editor-layout">
+  <div class="editor-toolbar">
+    <input type="text" id="bot-name" placeholder="nome-do-bot" value="<%= bot ? bot.name : 'novo-bot' %>">
+    <select id="bot-lang">
+      <option value="python" <%= bot && bot.lang === 'python' ? 'selected' : '' %>>python</option>
+      <option value="java" <%= bot && bot.lang === 'java' ? 'selected' : '' %>>java</option>
+    </select>
+    <div class="toolbar-sep"></div>
+    <button class="btn-primary" id="btn-run">▶ correr</button>
+    <button class="btn-secondary" id="btn-stop" style="display:none">■ parar</button>
+    <button class="btn-ghost" id="btn-save">guardar</button>
+    <span class="shortcut-hint" title="Ctrl+Enter para correr">Ctrl+↵</span>
+    <div class="status-indicator">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">parado</span>
+    </div>
+  </div>
+
+  <div class="editor-main">
+    <div class="code-wrapper">
+      <div class="code-tabs">
+        <div class="code-tab active" id="tab-name"><%= bot ? bot.filename : 'main.py' %></div>
+      </div>
+      <div style="display:flex; flex:1; overflow:hidden;">
+        <div class="line-numbers" id="line-numbers">1</div>
+        <textarea id="code-area" spellcheck="false"><%= bot && bot.code ? bot.code : defaultCode %></textarea>
+      </div>
+    </div>
+
+    <div class="terminal-panel">
+      <div class="terminal-header">
+        <div class="terminal-header-left">
+          <div class="terminal-dots">
+            <div class="t-dot r"></div>
+            <div class="t-dot y"></div>
+            <div class="t-dot g"></div>
+          </div>
+          <span class="terminal-title">output</span>
+        </div>
+        <button class="btn-ghost" onclick="clearTerminal()" style="padding:3px 8px; font-size:0.68rem;">limpar</button>
+      </div>
+      <div class="terminal-output" id="terminal-output"><span class="log-sys">// DuckCoding Editor
+// Ctrl+Enter para correr · Ctrl+S para guardar
+
+</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const userId = "<%= user._id %>";
+  let currentBotId = "<%= bot ? bot._id : '' %>";
+
+  socket.emit("join", userId);
+
+  const termEl = document.getElementById("terminal-output");
+  const statusDot = document.getElementById("status-dot");
+  const statusText = document.getElementById("status-text");
+  const btnRun = document.getElementById("btn-run");
+  const btnStop = document.getElementById("btn-stop");
+  const codeArea = document.getElementById("code-area");
+  const lineNumbers = document.getElementById("line-numbers");
+  const tabName = document.getElementById("tab-name");
+
+  function updateLineNumbers() {
+    const lines = codeArea.value.split("\n").length;
+    lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join("<br>");
+  }
+
+  function updateTabName() {
+    const name = document.getElementById("bot-name").value || "novo-bot";
+    const lang = document.getElementById("bot-lang").value;
+    tabName.textContent = lang === "java" ? "Main.java" : name.replace(/\s+/g, "_") + ".py";
+  }
+
+  codeArea.addEventListener("input", updateLineNumbers);
+  codeArea.addEventListener("scroll", function() {
+    lineNumbers.scrollTop = codeArea.scrollTop;
+  });
+  document.getElementById("bot-name").addEventListener("input", updateTabName);
+  document.getElementById("bot-lang").addEventListener("change", updateTabName);
+
+  updateLineNumbers();
+
+  function log(msg, type) {
+    const span = document.createElement("span");
+    if (type) span.className = "log-" + type;
+    span.textContent = msg;
+    termEl.appendChild(span);
+    termEl.scrollTop = termEl.scrollHeight;
+  }
+
+  function clearTerminal() {
+    termEl.innerHTML = '<span class="log-sys">// limpo\n\n</span>';
+  }
+
+  function setRunning(running) {
+    statusDot.className = "status-dot" + (running ? " running" : "");
+    statusText.textContent = running ? "a correr..." : "parado";
+    btnRun.style.display = running ? "none" : "inline-block";
+    btnStop.style.display = running ? "inline-block" : "none";
+  }
+
+  socket.on("log", function(data) {
+    if (data.botId === currentBotId) log(data.msg, data.type || "");
+  });
+
+  socket.on("bot-stopped", function() { setRunning(false); });
+
+  async function runBot() {
+    const code = codeArea.value;
+    const name = document.getElementById("bot-name").value || "novo-bot";
+    const lang = document.getElementById("bot-lang").value;
+    clearTerminal();
+    log("$ " + name + " [" + lang + "]\n", "sys");
+    setRunning(true);
+    const res = await fetch("/bot/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, name, lang, botId: currentBotId })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      currentBotId = data.botId;
+    } else {
+      log("[erro] " + (data.error || "erro desconhecido") + "\n", "err");
+      setRunning(false);
+    }
+  }
+
+  async function saveBot() {
+    const code = codeArea.value;
+    const name = document.getElementById("bot-name").value || "novo-bot";
+    const lang = document.getElementById("bot-lang").value;
+    const res = await fetch("/bot/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, name, lang, botId: currentBotId })
+    });
+    const data = await res.json();
+    if (data.ok) log("// guardado ✓\n", "sys");
+  }
+
+  btnRun.addEventListener("click", runBot);
+
+  btnStop.addEventListener("click", async function() {
+    await fetch("/bot/stop-current", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ botId: currentBotId })
+    });
+    setRunning(false);
+    log("\n[parado]\n", "sys");
+  });
+
+  document.getElementById("btn-save").addEventListener("click", saveBot);
+
+  codeArea.addEventListener("keydown", function(e) {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const s = this.selectionStart;
+      this.value = this.value.substring(0, s) + "  " + this.value.substring(this.selectionEnd);
+      this.selectionStart = this.selectionEnd = s + 2;
+      updateLineNumbers();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      runBot();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+      e.preventDefault();
+      saveBot();
+    }
+  });
+</script>
+</body>
+</html>

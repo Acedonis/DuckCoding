@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="tick tl"></div><div class="tick tr"></div><div class="tick bl"></div>
+  <div class="card-tag"><span>upload</span><span>001</span></div>
+  <h3>upload de ficheiro</h3>
+  <form action="/bot/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+    <div class="form-field">
+      <label>nome</label>
+      <input type="text" name="botname" placeholder="ex: meu-bot">
+    </div>
+    <div class="form-field">
+      <label>linguagem</label>
+      <select name="lang">
+        <option value="python">python</option>
+        <option value="java">java</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>ficheiro</label>
+      <input type="file" id="botfile" name="botfile" accept=".py,.java" required style="display:none">
+      <label for="botfile" class="file-label" id="file-label">clica para escolher .py ou .java</label>
+    </div>
+    <button type="submit" class="btn-primary">upload & deploy</button>
+  </form>
+</div>

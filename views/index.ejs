@@ -1,169 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include('partials/head') %>
   <title>DuckCoding</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<nav class="top-menu">
-  <div class="nav-brand">
-    <span class="duck-icon">🦆</span>
-    duckcoding
-  </div>
-  <ul>
-    <li><a href="#features">features</a></li>
-    <li><a href="#contato">contato</a></li>
-    <% if (user) { %>
-      <li><a href="/dashboard">dashboard →</a></li>
-    <% } else { %>
-      <li><a href="/login">entrar</a></li>
-      <li><a href="/login" class="nav-cta">começar grátis</a></li>
-    <% } %>
-  </ul>
-</nav>
+<%- include('partials/navbar-index') %>
 
-<section id="inicio" class="hero">
-  <div class="glow-orb orb1"></div>
-  <div class="glow-orb orb2"></div>
-  <div class="hero-content">
-    <p class="hero-label">// bot hosting platform v1.0</p>
-    <h1>Escreve.<br><em>Faz deploy.</em><br>Domina.</h1>
-    <p class="hero-sub">Cria e gere bots em Python e Java diretamente no browser. Editor integrado, logs em tempo real, zero configuração.</p>
-    <div class="hero-actions">
-      <a href="/login" class="btn-hero">começar grátis →</a>
-      <a href="#features" class="btn-hero-ghost">ver features</a>
-    </div>
-    <div class="terminal-block">
-      <div class="terminal-bar">
-        <div class="terminal-dot r"></div>
-        <div class="terminal-dot y"></div>
-        <div class="terminal-dot g"></div>
-      </div>
-      <div class="terminal-line">
-        <span class="terminal-prompt">$</span>
-        <span class="terminal-cmd" id="typewriter"></span>
-        <span class="terminal-cursor"></span>
-      </div>
-      <div id="terminal-out" style="opacity:0; margin-top:6px;" class="terminal-line">
-        <span class="terminal-out">✓ bot deployed successfully</span>
-      </div>
-    </div>
-  </div>
-</section>
+<%- include('partials/index/hero') %>
 
-<section id="features">
-  <div class="section-header">
-    <h2>features</h2>
-    <p>tudo o que precisas numa só plataforma</p>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card">
-      <span class="feature-icon">⚡</span>
-      <h3>deploy instantâneo</h3>
-      <p>Faz upload do teu código e lança o bot em segundos. Sem configs complicadas.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🖥️</span>
-      <h3>editor integrado</h3>
-      <p>Escreve código diretamente no browser com syntax highlighting.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📡</span>
-      <h3>logs em tempo real</h3>
-      <p>Monitoriza o teu bot ao vivo via WebSocket.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🐍</span>
-      <h3>python & java</h3>
-      <p>Suporte nativo para as linguagens mais populares.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔐</span>
-      <h3>login com google</h3>
-      <p>Autenticação OAuth segura. Sem passwords para lembrar.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🆓</span>
-      <h3>grátis para sempre</h3>
-      <p>Sem cartão. Sem limite de tempo. Começa agora.</p>
-    </div>
-  </div>
-</section>
+<%- include('partials/index/features') %>
 
-<section id="cta" style="text-align:center; padding: 80px 32px;">
-  <p class="hero-label" style="opacity:1; animation:none;">// pronto para começar?</p>
-  <h2 style="font-family:var(--font-mono); font-size:clamp(1.6rem,4vw,2.4rem); margin:16px 0; color:var(--text);">
-    o teu próximo bot<br><em style="color:var(--green); font-style:normal;">começa aqui.</em>
-  </h2>
-  <p style="color:var(--text-dim); margin:0 auto 32px; max-width:380px; font-size:0.9rem;">
-    Junta-te a outros developers que usam o DuckCoding.
-  </p>
-  <a href="/login" class="btn-hero">criar conta grátis →</a>
-</section>
+<%- include('partials/index/cta') %>
 
-<section id="contato">
-  <div class="section-header">
-    <h2>contato</h2>
-    <p>alguma questão? fala connosco</p>
-  </div>
-  <div class="contact-card">
-    <div class="contact-item">
-      <span class="contact-icon">✉️</span>
-      <div>
-        <strong>email</strong>
-        <a href="mailto:duckcoding@example.com">duckcoding@example.com</a>
-      </div>
-    </div>
-    <a href="mailto:duckcoding@example.com" class="btn-primary">enviar mensagem</a>
-  </div>
-</section>
+<%- include('partials/index/contato') %>
 
-<footer>
-  <span class="duck-icon">🦆</span>
-  <span>© 2026 duckcoding — todos os direitos reservados</span>
-</footer>
+<%- include('partials/footer') %>
 
-<script>
-  const lines = [
-    { cmd: "duckcoding deploy bot.py --lang python", out: true },
-    { cmd: "duckcoding logs my-bot --live", out: false },
-    { cmd: "duckcoding status --all", out: false },
-  ];
-  let li = 0, ci = 0, del = false, paused = false;
-  const el = document.getElementById("typewriter");
-  const outEl = document.getElementById("terminal-out");
+<%- include('partials/index/scripts') %>
 
-  function type() {
-    const cur = lines[li].cmd;
-    if (paused) {
-      paused = false; del = true;
-      outEl.style.opacity = "0";
-      setTimeout(type, 800); return;
-    }
-    if (!del) {
-      el.textContent = cur.slice(0, ++ci);
-      if (ci === cur.length) {
-        if (lines[li].out) outEl.style.opacity = "1";
-        paused = true;
-        setTimeout(type, 2200); return;
-      }
-      setTimeout(type, 50);
-    } else {
-      el.textContent = cur.slice(0, --ci);
-      if (ci === 0) {
-        del = false;
-        li = (li + 1) % lines.length;
-        setTimeout(type, 400); return;
-      }
-      setTimeout(type, 22);
-    }
-  }
-  setTimeout(type, 1000);
-</script>
 </body>
 </html>

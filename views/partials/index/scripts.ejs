@@ -1,0 +1,37 @@
+<script>
+  const lines = [
+    { cmd: "duckcoding deploy bot.py --lang python", out: true },
+    { cmd: "duckcoding logs my-bot --live", out: false },
+    { cmd: "duckcoding status --all", out: false },
+  ];
+  let li = 0, ci = 0, del = false, paused = false;
+  const el = document.getElementById("typewriter");
+  const outEl = document.getElementById("terminal-out");
+
+  function type() {
+    const cur = lines[li].cmd;
+    if (paused) {
+      paused = false; del = true;
+      outEl.style.opacity = "0";
+      setTimeout(type, 800); return;
+    }
+    if (!del) {
+      el.textContent = cur.slice(0, ++ci);
+      if (ci === cur.length) {
+        if (lines[li].out) outEl.style.opacity = "1";
+        paused = true;
+        setTimeout(type, 2200); return;
+      }
+      setTimeout(type, 50);
+    } else {
+      el.textContent = cur.slice(0, --ci);
+      if (ci === 0) {
+        del = false;
+        li = (li + 1) % lines.length;
+        setTimeout(type, 400); return;
+      }
+      setTimeout(type, 22);
+    }
+  }
+  setTimeout(type, 1000);
+</script>

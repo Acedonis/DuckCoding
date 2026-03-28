@@ -16,7 +16,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/duckcoding", { useNewUrlParser:true,
 app.use(express.static(path.join(__dirname,"public")));
 app.use(express.urlencoded({ extended:true }));
 
-// Simula login
 app.use((req,res,next)=>{
   req.user = { _id:"user123", username:"Teste" };
   next();
@@ -24,7 +23,6 @@ app.use((req,res,next)=>{
 
 app.set("view engine","ejs");
 
-// Rotas
 const botRoutes = require("./routes/bot");
 app.use("/bot", botRoutes);
 
@@ -35,10 +33,10 @@ app.get("/dashboard", async (req,res)=>{
   res.render("dashboard", { user: req.user, bots });
 });
 
-// Socket.io
-io.on("connection", socket=>{
-  const userId = socket.handshake.query.userId;
-  socket.join(userId);
+io.on("connection", socket => {
+  socket.on("join", userId => {
+    socket.join(userId);
+  });
 });
 
 server.listen(3000, ()=>console.log("Server running on http://localhost:3000"));

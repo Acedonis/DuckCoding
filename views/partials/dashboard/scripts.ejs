@@ -1,0 +1,56 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io(window.location.origin, {
+    transports: ['websocket', 'polling']
+  });
+  socket.emit("join", "<%= user._id %>");
+
+  socket.on("log", function(data) {
+    const box = document.getElementById("log-" + data.botId);
+    if (!box) return;
+    box.classList.add("active");
+    const span = document.createElement("span");
+    if (data.type === "err") span.className = "log-err";
+    if (data.type === "sys") span.className = "log-sys";
+    span.textContent = data.msg;
+    box.appendChild(span);
+    box.scrollTop = box.scrollHeight;
+  });
+
+  function startBot(botId) {
+    fetch("/bot/start/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          document.getElementById("start-" + botId).style.display = "none";
+          document.getElementById("stop-" + botId).style.display = "inline-block";
+          const b = document.getElementById("badge-" + botId);
+          b.textContent = "online"; b.className = "status-badge online";
+        }
+      });
+  }
+
+  function stopBot(botId) {
+    fetch("/bot/stop/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) {
+          document.getElementById("stop-" + botId).style.display = "none";
+          document.getElementById("start-" + botId).style.display = "inline-block";
+          const b = document.getElementById("badge-" + botId);
+          b.textContent = "offline"; b.className = "status-badge offline";
+        }
+      });
+  }
+
+  function deleteBot(botId) {
+    if (!confirm("apagar este bot?")) return;
+    fetch("/bot/delete/" + botId, { method: "POST" })
+      .then(r => r.json())
+      .then(d => { if (d.ok) document.getElementById("bot-" + botId).remove(); });
+  }
+
+  document.getElementById("botfile").addEventListener("change", function() {
+    document.getElementById("file-label").textContent = this.files[0] ? this.files[0].name : "clica para escolher .py ou .java";
+  });
+</script>

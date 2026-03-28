@@ -1,0 +1,16 @@
+<nav class="top-menu">
+  <div class="nav-brand">
+    <span class="duck-icon">🦆</span>
+    duckcoding
+  </div>
+  <ul>
+    <li><a href="#features">features</a></li>
+    <li><a href="#contato">contato</a></li>
+    <% if (user) { %>
+      <li><a href="/dashboard">dashboard →</a></li>
+    <% } else { %>
+      <li><a href="/login">entrar</a></li>
+      <li><a href="/login" class="nav-cta">começar grátis</a></li>
+    <% } %>
+  </ul>
+</nav>
