@@ -1,0 +1,209 @@
+<section id="quiz" style="padding: 80px 40px; background: var(--bg);">
+  <div style="max-width:600px; margin:0 auto;">
+
+    <!-- Header -->
+    <div style="text-align:center; margin-bottom:48px;">
+      <div style="font-family:var(--font-mono); font-size:.62rem; color:rgba(59,123,255,0.6); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span style="width:5px;height:5px;border-radius:50%;background:rgba(59,123,255,0.8);display:inline-block;"></span>
+        perfil rápido
+      </div>
+      <h2 style="font-size:1.6rem; font-weight:700; color:#fff; letter-spacing:-0.5px; margin-bottom:10px;">Qual é o teu objectivo?</h2>
+      <p style="font-size:.88rem; color:var(--text-dim);">3 perguntas para personalizar a tua experiência</p>
+    </div>
+
+    <!-- Progress -->
+    <div style="margin-bottom:36px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:var(--font-mono); font-size:.6rem; color:var(--text-dimmer); text-transform:uppercase; letter-spacing:1px;" id="quiz-label">Pergunta 1 de 3</span>
+        <span style="font-family:var(--font-mono); font-size:.6rem; color:rgba(59,123,255,0.6);" id="quiz-pct">33%</span>
+      </div>
+      <div style="height:2px; background:var(--border); border-radius:999px; overflow:hidden;">
+        <div id="quiz-bar" style="height:100%; width:33%; background:var(--blue); border-radius:999px; transition:width .5s cubic-bezier(.4,0,.2,1);"></div>
+      </div>
+    </div>
+
+    <!-- Questões -->
+    <div style="position:relative; min-height:320px;">
+
+      <!-- Q1 -->
+      <div class="qslide active" id="qq1">
+        <div style="font-family:var(--font-mono); font-size:.58rem; color:var(--text-dimmer); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px;">01 · objectivo</div>
+        <h3 style="font-size:1.2rem; font-weight:600; color:#fff; margin-bottom:6px; letter-spacing:-0.3px;">Qual é o teu principal objectivo?</h3>
+        <p style="font-size:.82rem; color:var(--text-dim); margin-bottom:24px; line-height:1.6;">Escolhe o que melhor descreve o que queres alcançar.</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="quiz-opt" onclick="quizPick(this,'q1','automate')">
+            <div class="quiz-opt-icon">🤖</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Automatizar tarefas repetitivas</div><div style="font-size:.72rem; color:var(--text-dim);">Poupa horas por semana com bots</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q1','monitor')">
+            <div class="quiz-opt-icon">📡</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Monitorizar e receber alertas</div><div style="font-size:.72rem; color:var(--text-dim);">Fica sempre a par do negócio</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q1','scale')">
+            <div class="quiz-opt-icon">📈</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Escalar operações</div><div style="font-size:.72rem; color:var(--text-dim);">Cresce sem aumentar custos</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q1','explore')">
+            <div class="quiz-opt-icon">🔍</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Explorar o que é possível</div><div style="font-size:.72rem; color:var(--text-dim);">Vou descobrir pelo caminho</div></div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+          <button class="btn-primary" id="q1next" onclick="quizNext(2)" style="opacity:.3; pointer-events:none;">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qslide hidden" id="qq2">
+        <div style="font-family:var(--font-mono); font-size:.58rem; color:var(--text-dimmer); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px;">02 · contexto</div>
+        <h3 style="font-size:1.2rem; font-weight:600; color:#fff; margin-bottom:6px; letter-spacing:-0.3px;">Como describes o teu negócio?</h3>
+        <p style="font-size:.82rem; color:var(--text-dim); margin-bottom:24px; line-height:1.6;">Ajuda-nos a personalizar para o teu contexto.</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="quiz-opt" onclick="quizPick(this,'q2','solo')">
+            <div class="quiz-opt-icon">🧑‍💻</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Freelancer / Solo</div><div style="font-size:.72rem; color:var(--text-dim);">Trabalho sozinho</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q2','startup')">
+            <div class="quiz-opt-icon">🚀</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Startup em crescimento</div><div style="font-size:.72rem; color:var(--text-dim);">Equipa pequena a mover-se rápido</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q2','sme')">
+            <div class="quiz-opt-icon">🏢</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">PME estabelecida</div><div style="font-size:.72rem; color:var(--text-dim);">Empresa com processos a modernizar</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q2','agency')">
+            <div class="quiz-opt-icon">🎨</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Agência / Serviços</div><div style="font-size:.72rem; color:var(--text-dim);">Giro clientes e projectos</div></div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:24px;">
+          <button class="btn-secondary" onclick="quizPrev(1)">← Anterior</button>
+          <button class="btn-primary" id="q2next" onclick="quizNext(3)" style="opacity:.3; pointer-events:none;">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="qslide hidden" id="qq3">
+        <div style="font-family:var(--font-mono); font-size:.58rem; color:var(--text-dimmer); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px;">03 · experiência</div>
+        <h3 style="font-size:1.2rem; font-weight:600; color:#fff; margin-bottom:6px; letter-spacing:-0.3px;">Qual é o teu nível técnico?</h3>
+        <p style="font-size:.82rem; color:var(--text-dim); margin-bottom:24px; line-height:1.6;">Ajustamos a complexidade ao teu conforto.</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="quiz-opt" onclick="quizPick(this,'q3','none')">
+            <div class="quiz-opt-icon">🌱</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Zero código</div><div style="font-size:.72rem; color:var(--text-dim);">Prefiro interfaces simples</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q3','some')">
+            <div class="quiz-opt-icon">⚙️</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Um pouco de código</div><div style="font-size:.72rem; color:var(--text-dim);">Consigo editar scripts</div></div>
+          </div>
+          <div class="quiz-opt" onclick="quizPick(this,'q3','dev')">
+            <div class="quiz-opt-icon">💻</div>
+            <div><div style="font-size:.82rem; font-weight:500; color:#fff; margin-bottom:2px;">Developer</div><div style="font-size:.72rem; color:var(--text-dim);">Quero controlo total</div></div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:24px;">
+          <button class="btn-secondary" onclick="quizPrev(2)">← Anterior</button>
+          <button class="btn-primary" id="q3next" onclick="quizResult()" style="opacity:.3; pointer-events:none;">Ver perfil →</button>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div class="qslide hidden" id="qq-result">
+        <div style="text-align:center; padding:20px 0;">
+          <div style="width:52px; height:52px; border-radius:50%; background:rgba(57,211,83,0.08); border:1px solid rgba(57,211,83,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39d353" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="font-family:var(--font-mono); font-size:.6rem; color:var(--text-dimmer); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">análise completa</div>
+          <h3 id="quiz-result-title" style="font-size:1.4rem; font-weight:700; color:#fff; letter-spacing:-0.5px; margin-bottom:8px;"></h3>
+          <p id="quiz-result-desc" style="font-size:.85rem; color:var(--text-dim); margin-bottom:24px; line-height:1.6;"></p>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; text-align:left; margin-bottom:28px;">
+            <div style="font-family:var(--font-mono); font-size:.58rem; color:var(--text-dimmer); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px;">o teu plano recomendado</div>
+            <div id="quiz-result-text" style="font-size:.85rem; color:var(--text-dim); line-height:1.75;"></div>
+          </div>
+          <div style="display:flex; gap:10px; justify-content:center;">
+            <button class="btn-secondary" onclick="quizReset()">← Rever</button>
+            <a href="/login" class="btn-primary">Criar conta →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.qslide { display:none; }
+.qslide.active { display:block; }
+.quiz-opt {
+  display:flex; align-items:center; gap:14px;
+  padding:13px 16px; background:rgba(255,255,255,0.02);
+  border:1px solid var(--border); border-radius:var(--radius-lg);
+  cursor:pointer; transition:all .15s;
+}
+.quiz-opt:hover { border-color:rgba(59,123,255,0.2); background:rgba(59,123,255,0.04); transform:translateX(3px); }
+.quiz-opt.sel { border-color:rgba(59,123,255,0.4); background:rgba(59,123,255,0.08); }
+.quiz-opt-icon { width:32px; height:32px; border-radius:var(--radius); background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:.95rem; flex-shrink:0; }
+</style>
+
+<script>
+const quizAns = {};
+const quizProfiles = {
+  automate: { t:'O Automatizador.', d:'Escolheste poupar tempo — a melhor decisão que um profissional pode tomar.', b:'O teu foco está em <strong>automatizar o trabalho repetitivo</strong> para libertar horas para o que realmente importa.' },
+  monitor:  { t:'O Estratega.',    d:'Informação em tempo real é poder — e tu sabes isso.',                        b:'Queres <strong>visibilidade total</strong> do teu negócio, sem surpresas. Dashboards e alertas inteligentes.' },
+  scale:    { t:'O Arquitecto.',   d:'Crescer sem escalar custos é a equação certa.',                              b:'A tua visão é <strong>crescer de forma inteligente</strong>. Infraestrutura robusta, resultados exponenciais.' },
+  explore:  { t:'O Explorador.',   d:'A curiosidade é o motor de toda a inovação.',                               b:'<strong>Começa com um bot simples</strong>, vê os resultados, e a visão vai emergir naturalmente.' },
+};
+
+function quizPick(el, qid, val) {
+  quizAns[qid] = val;
+  el.closest('div[style]').querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  const btn = document.getElementById(qid + 'next');
+  btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+}
+
+function quizNext(n) {
+  document.getElementById('qq' + (n-1)).className = 'qslide';
+  document.getElementById('qq' + n).className = 'qslide active';
+  const pct = Math.round(n/3*100);
+  document.getElementById('quiz-bar').style.width = pct + '%';
+  document.getElementById('quiz-pct').textContent = pct + '%';
+  document.getElementById('quiz-label').textContent = 'Pergunta ' + n + ' de 3';
+  document.getElementById('qq' + n).scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function quizPrev(n) {
+  document.getElementById('qq' + (n+1)).className = 'qslide';
+  document.getElementById('qq' + n).className = 'qslide active';
+  const pct = Math.round(n/3*100);
+  document.getElementById('quiz-bar').style.width = pct + '%';
+  document.getElementById('quiz-pct').textContent = pct + '%';
+  document.getElementById('quiz-label').textContent = 'Pergunta ' + n + ' de 3';
+}
+
+function quizResult() {
+  const p = quizProfiles[quizAns.q1] || quizProfiles.explore;
+  document.getElementById('quiz-result-title').textContent = p.t;
+  document.getElementById('quiz-result-desc').textContent = p.d;
+  document.getElementById('quiz-result-text').innerHTML = p.b;
+  document.getElementById('qq3').className = 'qslide';
+  document.getElementById('qq-result').className = 'qslide active';
+  document.getElementById('quiz-bar').style.width = '100%';
+  document.getElementById('quiz-pct').textContent = '100%';
+  document.getElementById('quiz-label').textContent = 'Completo!';
+  document.getElementById('qq-result').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function quizReset() {
+  document.getElementById('qq-result').className = 'qslide';
+  document.getElementById('qq1').className = 'qslide active';
+  document.getElementById('quiz-bar').style.width = '33%';
+  document.getElementById('quiz-pct').textContent = '33%';
+  document.getElementById('quiz-label').textContent = 'Pergunta 1 de 3';
+  document.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('sel'));
+  ['q1next','q2next','q3next'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) { btn.style.opacity = '.3'; btn.style.pointerEvents = 'none'; }
+  });
+}
+</script>
